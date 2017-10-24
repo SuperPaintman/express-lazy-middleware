@@ -18,6 +18,7 @@
       "node_modules/@types"
     ],
     "lib": [
+      "dom",
       "es6"
     ],
     "outDir": "./lib",

@@ -24,10 +24,71 @@ $ yarn add express-lazy-middleware
 
 ## Usage
 
+Basic usage:
+
 ```ts
 'use strict';
+/** Imports */
+import * as Express from 'express';
+import lazy from 'express-lazy-middleware';
+
+
+/** Init */
+app.get('/users', lazy(() => (req, res, next) => {
+  res
+    .send('I am too lazy');
+}));
+
+
+/** Start */
+app.listen(3000);
 ```
 
+
+Lazy require a module:
+
+```ts
+'use strict';
+/** Imports */
+import * as Express from 'express';
+import lazy from 'express-lazy-middleware';
+
+
+/** Init */
+// `require` will be called after request to the `/users`.
+// Note: when you use a ES6 module with `require()` don't forget about `default`
+// export.
+app.use('/users', lazy(() => require('./users').default));
+
+
+/** Start */
+app.listen(3000);
+```
+
+
+Init with promise:
+
+```ts
+'use strict';
+/** Imports */
+import * as Express from 'express';
+import lazy from 'express-lazy-middleware';
+
+
+/** Init */
+// The `loader` (first argument) function will be called only once.
+app.get('/session', lazy(async () => {
+  await new Promise((resolve, reject) => {
+    setTimeout(resolve, 5);
+  });
+
+  return require('./session').get;
+}));
+
+
+/** Start */
+app.listen(3000);
+```
 
 --------------------------------------------------------------------------------
 
